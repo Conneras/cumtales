@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cumtales</title>
+  <meta name="description" content="Anonymous stories on an elegant wall of notes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Age Wall -->
+  <div id="ageWall" class="age-wall" role="dialog" aria-modal="true" aria-labelledby="ageTitle">
+    <div class="age-card">
+      <div class="age-brand">
+        <div class="dot"></div>
+        <div class="brand">Cumtales</div>
+      </div>
+      <h1 id="ageTitle">Adults only</h1>
+      <p class="muted">This website contains mature, user-submitted stories intended for adults. Confirm you are at least 18 years old.</p>
+      <div class="age-actions">
+        <button id="enterBtn" class="btn primary">I am 18+ enter</button>
+        <button id="leaveBtn" class="btn ghost">Leave</button>
+      </div>
+      <div class="age-foot muted">By entering you agree to the Rules and Privacy.</div>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="left">
+      <div class="logo">
+        <span class="logo-dot"></span>
+        <span class="logo-text">Cumtales</span>
+      </div>
+      <nav class="nav">
+        <a href="#" id="openRules">Rules</a>
+        <a href="#" id="openPrivacy">Privacy</a>
+      </nav>
+    </div>
+
+    <div class="right">
+      <div class="search">
+        <input id="searchInput" type="search" placeholder="Search stories..." autocomplete="off" />
+      </div>
+      <button id="newStoryBtn" class="btn primary small">New story</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h2>The wall</h2>
+      <p class="muted">Click a note to read. Upvote what you want to see on page one.</p>
+    </section>
+
+    <section class="controls">
+      <div class="control-left">
+        <div class="pill" id="sortPill">Sorted by upvotes</div>
+        <div class="muted" id="countLabel"></div>
+      </div>
+      <div class="control-right">
+        <button id="prevPage" class="btn ghost small">Prev</button>
+        <div class="page-indicator" id="pageIndicator">Page 1</div>
+        <button id="nextPage" class="btn ghost small">Next</button>
+      </div>
+    </section>
+
+    <section id="wall" class="wall" aria-live="polite"></section>
+
+    <footer class="footer muted">
+      <div>© <span id="year"></span> Cumtales. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="#" id="openRules2">Rules</a>
+        <a href="#" id="openPrivacy2">Privacy</a>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Story Modal -->
+  <div id="storyModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="storyTitle">
+      <div class="modal-head">
+        <div>
+          <h3 id="storyTitle">Story</h3>
+          <div class="meta muted" id="storyMeta"></div>
+        </div>
+        <button class="icon-btn" data-close="1" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="story-text" id="storyText"></div>
+      </div>
+      <div class="modal-foot">
+        <button id="upvoteBtn" class="btn ghost">Upvote</button>
+        <button id="shareBtn" class="btn ghost">Copy link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Modal -->
+  <div id="createModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="createTitle">
+      <div class="modal-head">
+        <div>
+          <h3 id="createTitle">New story</h3>
+          <div class="meta muted">Anonymous. Text only. Keep it legal and consensual.</div>
+        </div>
+        <button class="icon-btn" data-close="1" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="createForm" class="form">
+          <label>
+            Title
+            <input id="titleInput" maxlength="80" placeholder="Short and tasteful" required />
+          </label>
+          <label>
+            Story
+            <textarea id="bodyInput" rows="10" maxlength="6000" placeholder="Write your story..." required></textarea>
+          </label>
+          <div class="row">
+            <label class="checkbox">
+              <input id="consentCheck" type="checkbox" required />
+              <span>I confirm this story is legal, consensual, and involves adults.</span>
+            </label>
+          </div>
+          <div class="row actions">
+            <button type="button" class="btn ghost" data-close="1">Cancel</button>
+            <button type="submit" class="btn primary">Post to wall</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rules Modal -->
+  <div id="rulesModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+      <div class="modal-head">
+        <div>
+          <h3 id="rulesTitle">Rules</h3>
+          <div class="meta muted">Keep Cumtales alive.</div>
+        </div>
+        <button class="icon-btn" data-close="1" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <ul class="rules">
+          <li>Adults only. No minors, no age ambiguity.</li>
+          <li>No non-consensual content, coercion, threats, blackmail, or “revenge” material.</li>
+          <li>No identifying personal info. No doxxing. No contact details.</li>
+          <li>No images. Text only.</li>
+          <li>No illegal content or instructions.</li>
+          <li>Report abuse. We remove and ban.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Modal -->
+  <div id="privacyModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+      <div class="modal-head">
+        <div>
+          <h3 id="privacyTitle">Privacy</h3>
+          <div class="meta muted">Simple by design.</div>
+        </div>
+        <button class="icon-btn" data-close="1" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="muted">This demo stores stories and votes in your browser (localStorage). Add a real backend later for accounts, moderation, and persistence.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
