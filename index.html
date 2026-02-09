@@ -8,6 +8,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="icon" href="icon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="icon-180.png" />
+
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -24,19 +29,78 @@
         <button id="enterBtn" class="btn primary">I am 18+ enter</button>
         <button id="leaveBtn" class="btn ghost">Leave</button>
       </div>
-      <div class="age-foot muted">By entering you agree to the Rules and Privacy.</div>
+      <div class="age-foot muted">By entering you agree to the Rules, Privacy, and Terms.</div>
+    </div>
+  </div>
+
+  <!-- Onboarding -->
+  <div id="onboardModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card onboard-card" role="dialog" aria-modal="true" aria-labelledby="onboardTitle">
+      <div class="modal-head">
+        <div>
+          <h3 id="onboardTitle">Before you enter</h3>
+          <div class="meta muted">10 quick screens. No graphic content.</div>
+        </div>
+        <button class="icon-btn" id="skipOnboard" aria-label="Skip">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="onboard-stage">
+          <div class="onboard-image" id="onboardImage"></div>
+          <div class="onboard-copy">
+            <div class="onboard-kicker muted" id="onboardKicker"></div>
+            <h4 class="onboard-title" id="onboardTitleText"></h4>
+            <p class="muted" id="onboardBody"></p>
+          </div>
+        </div>
+
+        <div id="onboardQuestions" class="onboard-questions" style="display:none;">
+          <h4 class="onboard-title">Make it yours</h4>
+          <p class="muted">Answer 3 quick questions. You stay anonymous.</p>
+          <div class="qblock">
+            <div class="qlabel">You’re here to</div>
+            <div class="qchoices" data-q="intent">
+              <button class="qbtn" data-v="read">Read</button>
+              <button class="qbtn" data-v="write">Write</button>
+              <button class="qbtn" data-v="both">Both</button>
+            </div>
+          </div>
+          <div class="qblock">
+            <div class="qlabel">Your vibe</div>
+            <div class="qchoices" data-q="vibe">
+              <button class="qbtn" data-v="slow">Slow burn</button>
+              <button class="qbtn" data-v="bold">Bold</button>
+              <button class="qbtn" data-v="dark">Dark</button>
+            </div>
+          </div>
+          <div class="qblock">
+            <div class="qlabel">You like stories that feel</div>
+            <div class="qchoices" data-q="feel">
+              <button class="qbtn" data-v="romantic">Romantic</button>
+              <button class="qbtn" data-v="dangerous">Dangerous</button>
+              <button class="qbtn" data-v="mysterious">Mysterious</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="onboard-dots" id="onboardDots"></div>
+      </div>
+      <div class="modal-foot onboard-foot">
+        <button class="btn ghost" id="backOnboard">Back</button>
+        <button class="btn primary" id="nextOnboard">Next</button>
+      </div>
     </div>
   </div>
 
   <header class="topbar">
     <div class="left">
-      <div class="logo">
-        <span class="logo-dot"></span>
-        <span class="logo-text">Cumtales</span>
-      </div>
+      <a class="logo" href="#" id="homeLogo" aria-label="Cumtales home">
+        <img src="logo.svg" alt="Cumtales" class="logo-img"/>
+      </a>
       <nav class="nav">
         <a href="#" id="openRules">Rules</a>
         <a href="#" id="openPrivacy">Privacy</a>
+        <a href="#" id="openTerms">Terms</a>
       </nav>
     </div>
 
@@ -73,6 +137,7 @@
       <div class="footer-links">
         <a href="#" id="openRules2">Rules</a>
         <a href="#" id="openPrivacy2">Privacy</a>
+        <a href="#" id="openTerms2">Terms</a>
       </div>
     </footer>
   </main>
@@ -113,11 +178,12 @@
         <form id="createForm" class="form">
           <label>
             Title
-            <input id="titleInput" maxlength="80" placeholder="Short and tasteful" required />
+            <input id="titleInput" maxlength="120" placeholder="Short and tasteful" required />
           </label>
           <label>
             Story
-            <textarea id="bodyInput" rows="10" maxlength="6000" placeholder="Write your story..." required></textarea>
+            <textarea id="bodyInput" rows="12" maxlength="20000" placeholder="Write your story..." required></textarea>
+            <div class="muted" style="font-size:12px;margin-top:6px;">Recommended: 800–2,500 characters. No limit that feels tight.</div>
           </label>
           <div class="row">
             <label class="checkbox">
@@ -150,10 +216,46 @@
           <li>Adults only. No minors, no age ambiguity.</li>
           <li>No non-consensual content, coercion, threats, blackmail, or “revenge” material.</li>
           <li>No identifying personal info. No doxxing. No contact details.</li>
-          <li>No images. Text only.</li>
+          <li>Text only. No images.</li>
           <li>No illegal content or instructions.</li>
-          <li>Report abuse. We remove and ban.</li>
+          <li>Report abuse. We remove content and ban users.</li>
         </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terms Modal -->
+  <div id="termsModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="termsTitle">
+      <div class="modal-head">
+        <div>
+          <h3 id="termsTitle">Terms of use</h3>
+          <div class="meta muted">Last updated: <span id="termsDate"></span></div>
+        </div>
+        <button class="icon-btn" data-close="1" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="legal">
+          <h4>Adults only</h4>
+          <p>You must be 18+ to use Cumtales. If you are not 18+, leave immediately.</p>
+          <h4>User content</h4>
+          <p>You are responsible for what you post. You confirm your content is legal, consensual, and involves adults. No personal data, no contact details, no harassment, no threats, no non-consensual content, and no illegal content.</p>
+          <h4>License</h4>
+          <p>By posting, you give us a worldwide, non-exclusive license to host, display, distribute, and moderate your content so the service can operate. You can request removal.</p>
+          <h4>Moderation</h4>
+          <p>We can remove content, restrict accounts, and use automated tools to detect abuse. We are not required to publish anything.</p>
+          <h4>Copyright and takedowns</h4>
+          <p>Do not post text you don’t own or have rights to use. If you believe content infringes your rights, contact us and we will review and remove where appropriate.</p>
+          <h4>No guarantees</h4>
+          <p>The service is provided “as is.” We do not guarantee availability, rankings, or that content will remain published.</p>
+          <h4>Limitation of liability</h4>
+          <p>To the maximum extent allowed by law, we are not liable for indirect or consequential damages, or for user content. Our total liability is limited to the amount you paid us in the last 12 months.</p>
+          <h4>Payments</h4>
+          <p>If subscriptions are enabled, they renew until cancelled. We can refuse or refund payments where fraud or abuse is suspected.</p>
+          <h4>Governing law</h4>
+          <p>Set your governing law and venue before launch.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -170,7 +272,22 @@
         <button class="icon-btn" data-close="1" aria-label="Close">✕</button>
       </div>
       <div class="modal-body">
-        <p class="muted">This demo stores stories and votes in your browser (localStorage). Add a real backend later for accounts, moderation, and persistence.</p>
+        <div class="legal">
+          <h4>What we collect</h4>
+          <p>This version stores age confirmation, onboarding completion, stories, and votes on your device (localStorage). If we add accounts later, we may collect email for login, device data for security, and basic analytics.</p>
+          <h4>What you must not post</h4>
+          <p>No personal data, contact details, or identifying info in stories. If you post it, we can remove it.</p>
+          <h4>Cookies and storage</h4>
+          <p>We use local storage to remember settings. If we add payments, Stripe will use cookies and device signals to prevent fraud.</p>
+          <h4>Sharing</h4>
+          <p>We share data with service providers only as needed to run the site (hosting, security, payments). We do not sell your personal data.</p>
+          <h4>Safety and enforcement</h4>
+          <p>We may review content and metadata to enforce rules, respond to legal requests, and keep the platform safe.</p>
+          <h4>Retention</h4>
+          <p>We keep data as long as needed to provide the service, enforce rules, or comply with law.</p>
+          <h4>Contact</h4>
+          <p>Add a contact email on your live domain for privacy requests and takedowns.</p>
+        </div>
       </div>
     </div>
   </div>
